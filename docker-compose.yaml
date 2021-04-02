@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  # application conatiner configs
+  app:
+    build: . #path from Dockerfile
+    entrypoint: .docker/entrypoint.sh 
+    container_name: 'app' #container name
+    volumes: 
+      - ./:/home/node/app
+    ports: 
+      - 3333:3333 # ports
+    depends_on:
+      - mongodb
+  
+  mongodb: 
+    image: mongo:4.4.4
+    container_name: mongodb-nestjs
+    restart: always
+    volumes:
+      - ./.docker/dbdata:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongo
+      - MONGO_INITDB_ROOT_PASSWORD=mongo
+
+    ports:
+      - 27017:27017
